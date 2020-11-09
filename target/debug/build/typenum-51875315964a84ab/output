@@ -1,2 +1,0 @@
-cargo:rustc-env=TYPENUM_BUILD_CONSTS=/Volumes/LaCie/SSD/Personal/Rust/personal_portfolio/target/debug/build/typenum-51875315964a84ab/out/consts.rs
-cargo:rustc-env=TYPENUM_BUILD_OP=/Volumes/LaCie/SSD/Personal/Rust/personal_portfolio/target/debug/build/typenum-51875315964a84ab/out/op.rs
