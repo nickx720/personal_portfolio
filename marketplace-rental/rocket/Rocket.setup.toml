@@ -1,0 +1,3 @@
+[default.databases.diesel_db]
+url="postgres"
+timeout = 10
