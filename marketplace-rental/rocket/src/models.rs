@@ -8,9 +8,8 @@ use rocket_sync_db_pools::diesel;
 
 type Result<T, E = Debug<diesel::result::Error>> = std::result::Result<T, E>;
 
-#[derive(Insertable, Queryable, Serialize, Ord, Eq, PartialEq, PartialOrd, Deserialize, Clone)]
+#[derive(Insertable, Queryable, Serialize, Deserialize, Clone, Debug)]
 #[serde(crate = "rocket::serde")]
-#[diesel(table_name = users)]
 pub struct User {
     #[serde(skip_deserializing)]
     pub id: i32,
@@ -18,9 +17,18 @@ pub struct User {
     pub email: String,
 }
 
+#[derive(Insertable, Queryable, Serialize, Deserialize, Clone, Debug)]
+#[serde(crate = "rocket::serde")]
+#[diesel(table_name = users)]
+pub struct NewUser {
+    pub name: String,
+    pub email: String,
+}
+
 #[post("/", data = "<user>")]
-pub async fn create(db: Db, user: Json<User>) -> Result<Created<Json<User>>> {
+pub async fn create(db: Db, user: Json<NewUser>) -> Result<Created<Json<NewUser>>> {
     let user_value = user.clone();
+    dbg!(&user_value);
     db.run(move |conn| {
         diesel::insert_into(users::table)
             .values(&*user_value)
@@ -36,7 +44,6 @@ pub async fn list(db: Db) -> Result<Json<Vec<i32>>> {
     let ids: Vec<i32> = db
         .run(move |conn| users::table.select(users::id).load(conn))
         .await?;
-
     Ok(Json(ids))
 }
 
